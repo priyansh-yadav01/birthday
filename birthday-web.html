@@ -1,0 +1,2825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <!-- =========================================================
+       HOW TO PERSONALIZE THIS WEBSITE
+       =========================================================
+       HELLO! If you have ZERO coding knowledge, start here.
+
+       FOLDER STRUCTURE:
+       birthday-website/
+       ├── index.html              <- this file
+       ├── images/
+       │   ├── her-photo-1.jpg
+       │   ├── her-photo-2.jpg
+       │   └── ...
+       └── audio/
+           ├── our-song.mp3
+    
+       HOW TO EDIT:
+       1. Search this file for "EDIT THIS". Every important thing
+          you should personalize is marked that way.
+       2. Most text, names, dates, cities, memories and songs are
+          collected in the EASY CUSTOMIZATION section near the
+          beginning of the JavaScript.
+       3. Photos go inside the "images" folder. The filename in the
+          JavaScript must exactly match your real filename.
+       4. Your original song goes inside the "audio" folder.
+       5. Open index.html by double-clicking it. No server is needed.
+       6. Google Fonts are used when internet is available, but the
+          website has fallback fonts if they cannot load.
+
+       WHAT THESE CODING WORDS MEAN:
+       - HTML = the content/structure of the webpage.
+       - CSS = how the webpage looks (colors, sizes, animation).
+       - JavaScript = the instructions that make buttons and
+         interactive things work.
+       - An element = one piece of HTML, such as a heading or button.
+       - A class = a reusable label used mainly to style elements.
+       - An id = a unique name used to find one specific element.
+       - A function = a reusable set of JavaScript instructions.
+
+       PHOTO RULE:
+       Every photo below has a comment telling you what to use,
+       the filename, and the section to edit.
+
+       AUDIO RULE:
+       Put MP3 files in /audio/. If your filename is different,
+       change the matching filename in EASY CUSTOMIZATION.
+
+       TO ADD VIDEO:
+       You can later use a normal HTML <video> element and place
+       the video file in a "video" folder. This version does not
+       require video, so the site stays simple and portable.
+
+       COLORS:
+       Change the CSS variables near the top of the <style> section.
+       You do NOT need to understand CSS to use them.
+
+       NAVIGATION:
+       Every slide has visible Back and Next buttons.
+       The first slide disables Back, and the final slide disables Next.
+       Arrow keys also work on a laptop/desktop.
+
+       ADD/REMOVE SLIDES:
+       Each <section class="slide"> is one slide. JavaScript moves
+       between them. If you add/remove slides, the progress indicator
+       automatically updates because it counts the slide elements.
+
+       IMPORTANT:
+       Browsers normally block websites from autoplaying audio.
+       That is intentional. Music starts only after she clicks Play.
+  ========================================================= -->
+
+
+  <!-- EDIT THIS: Browser tab title. -->
+  <title>For My Kitkat ❤️</title>
+
+  <!-- EDIT THIS: Optional website icon. Put favicon.png in images/. -->
+  <link rel="icon" href="images/favicon.png">
+
+  <!-- Beautiful fonts; the website still works with fallback fonts. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=Parisienne&display=swap" rel="stylesheet">
+
+  <style>
+    /* =========================================================
+       BASIC DESIGN SETTINGS
+       =========================================================
+       These are called CSS variables. Think of them as named
+       color boxes. Changing one color here changes it everywhere.
+    ========================================================= */
+
+    :root {
+      --rose: #d96c88;
+      --deep-rose: #8d304d;
+      --wine: #471b2b;
+      --cream: #fff8f2;
+      --paper: #fffdfb;
+      --lavender: #d9c9e8;
+      --gold: #c9a86a;
+      --ink: #30232a;
+      --muted: #806c75;
+      --shadow: 0 20px 60px rgba(53, 20, 34, 0.15);
+      --radius: 28px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow: hidden;
+      background: var(--cream);
+      color: var(--ink);
+      font-family: "DM Sans", Arial, sans-serif;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    /* The main stage holds all remaining slides. */
+    #story {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Every slide fills the entire screen. */
+    .slide {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      padding: 76px 7vw 95px;
+      overflow-y: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateX(45px) scale(.985);
+      transition: opacity .7s ease, transform .7s ease, visibility .7s;
+      z-index: 1;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(0) scale(1);
+      z-index: 2;
+    }
+
+    .content {
+      width: min(1100px, 100%);
+      position: relative;
+      z-index: 4;
+    }
+
+    h1, h2, h3 {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-weight: 600;
+    }
+
+    h1 {
+      font-size: clamp(3.3rem, 8vw, 7rem);
+      line-height: .9;
+    }
+
+    h2 {
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      line-height: .95;
+      margin-bottom: 18px;
+    }
+
+    p {
+      line-height: 1.7;
+    }
+
+    .eyebrow {
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: .22em;
+      font-size: .72rem;
+      margin-bottom: 18px;
+    }
+
+    .script {
+      font-family: "Parisienne", cursive;
+    }
+
+    .soft {
+      color: var(--muted);
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* =========================================================
+       BUTTONS
+    ========================================================= */
+    .btn {
+      border: 0;
+      border-radius: 999px;
+      padding: 14px 24px;
+      margin-top: 25px;
+      cursor: pointer;
+      color: white;
+      background: linear-gradient(135deg, var(--deep-rose), var(--rose));
+      box-shadow: 0 12px 28px rgba(141,48,77,.2);
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 17px 35px rgba(141,48,77,.28);
+    }
+
+    .btn.secondary {
+      color: var(--deep-rose);
+      background: rgba(255,255,255,.7);
+      border: 1px solid rgba(141,48,77,.16);
+      box-shadow: none;
+    }
+
+    /* =========================================================
+       PROGRESS BAR
+    ========================================================= */
+    #progress {
+      position: fixed;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      width: min(430px, 72vw);
+    }
+
+    #progressTrack {
+      height: 4px;
+      background: rgba(255,255,255,.28);
+      border-radius: 20px;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    #progressFill {
+      width: 0;
+      height: 100%;
+      background: var(--gold);
+      transition: width .6s ease;
+    }
+
+    #progressText {
+      display: block;
+      color: rgba(255,255,255,.7);
+      font-size: .65rem;
+      margin-top: 6px;
+      letter-spacing: .12em;
+    }
+
+
+    /* =========================================================
+       VISIBLE BACK / NEXT BUTTONS ON EVERY SLIDE
+       These are separate from the keyboard controls.
+    ========================================================= */
+    /* No navigation buttons on the opening slide. */
+    .secret .slide-navigation {
+      display: none;
+    }
+
+    /* On the birthday cake slide, show navigation only after the candle is blown. */
+    .reveal .slide-navigation {
+      display: none;
+    }
+
+    .reveal.candle-ready .slide-navigation {
+      display: flex;
+    }
+
+    .slide-navigation {
+      position: absolute;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%);
+      z-index: 20;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      width: min(92vw, 420px);
+      pointer-events: none;
+    }
+
+    .slide-nav-btn {
+      pointer-events: auto;
+      min-width: 105px;
+      padding: 11px 19px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.28);
+      color: white;
+      background: rgba(20, 12, 18, .32);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      cursor: pointer;
+      transition: transform .25s ease, background .25s ease, opacity .25s ease;
+    }
+
+    .slide-nav-btn:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,.16);
+    }
+
+    /* On light slides, use a soft dark/pink button. */
+    .intro .slide-nav-btn,
+    .timeline-slide .slide-nav-btn,
+    .photos-slide .slide-nav-btn,
+    .love-slide .slide-nav-btn,
+    .playlist-slide .slide-nav-btn,
+    .cozy-slide .slide-nav-btn,
+    .gifts-slide .slide-nav-btn,
+    .openwhen-slide .slide-nav-btn,
+    .future-slide .slide-nav-btn,
+    .letter-slide .slide-nav-btn,
+    .funny-slide .slide-nav-btn {
+      color: var(--deep-rose);
+      background: rgba(255,255,255,.72);
+      border-color: rgba(141,48,77,.16);
+    }
+
+    .slide-nav-btn:disabled {
+      opacity: .35;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* =========================================================
+       NEXT / PREVIOUS NAVIGATION
+    ========================================================= */
+    #navigation {
+      position: fixed;
+      bottom: 78px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      display: flex;
+      gap: 9px;
+    }
+
+    .nav-btn {
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 50%;
+      background: rgba(0,0,0,.17);
+      color: white;
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-btn:hover {
+      background: rgba(255,255,255,.18);
+    }
+
+    /* =========================================================
+       FLOATING ROMANTIC PARTICLES
+    ========================================================= */
+    #particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 50;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      bottom: -30px;
+      opacity: 0;
+      animation: floatUp linear forwards;
+      user-select: none;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) rotate(0); opacity: 0; }
+      15% { opacity: .55; }
+      80% { opacity: .3; }
+      100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* =========================================================
+       SLIDE 1 — SECRET DOOR
+    ========================================================= */
+    .secret {
+      color: white;
+      background:
+        radial-gradient(circle at 50% 45%, rgba(154,62,96,.35), transparent 28%),
+        radial-gradient(circle at 15% 20%, rgba(217,201,232,.13), transparent 20%),
+        linear-gradient(145deg, #130d17, #351426 60%, #160d18);
+    }
+
+    .secret .content {
+      max-width: 760px;
+    }
+
+    .secret h1 {
+      font-size: clamp(3rem, 7vw, 6rem);
+    }
+
+    .promise {
+      font-size: 1.1rem;
+      color: #eadfe4;
+      margin-top: 22px;
+    }
+
+    /* =========================================================
+       SLIDE 2 — BIRTHDAY REVEAL
+    ========================================================= */
+    .reveal {
+      color: white;
+      background:
+        radial-gradient(circle at 50% 45%, rgba(255,190,205,.3), transparent 20%),
+        linear-gradient(145deg, #6f243f, #ad536e 50%, #5d2137);
+    }
+
+    .cake {
+      position: relative;
+      width: 180px;
+      height: 130px;
+      margin: 35px auto 25px;
+    }
+
+    .cake-base {
+      position: absolute;
+      bottom: 0;
+      width: 180px;
+      height: 75px;
+      border-radius: 14px 14px 24px 24px;
+      background: linear-gradient(#fff1ef, #f7cbd2);
+      box-shadow: 0 20px 35px rgba(0,0,0,.18);
+    }
+
+    .cake-cream {
+      position: absolute;
+      bottom: 57px;
+      left: 12px;
+      width: 156px;
+      height: 30px;
+      border-radius: 50%;
+      background: #fffaf8;
+    }
+
+    .candle {
+      position: absolute;
+      left: 78px;
+      bottom: 82px;
+      width: 24px;
+      height: 58px;
+      border-radius: 8px;
+      background: repeating-linear-gradient(
+        135deg, #fff 0 8px, #e89caf 8px 16px
+      );
+      cursor: pointer;
+    }
+
+    .flame {
+      position: absolute;
+      left: 3px;
+      top: -25px;
+      width: 18px;
+      height: 25px;
+      border-radius: 70% 30% 70% 30%;
+      background: #ffd27a;
+      transform: rotate(45deg);
+      box-shadow: 0 0 25px #ffd27a;
+      animation: flicker .6s infinite alternate;
+    }
+
+    @keyframes flicker { 
+      to { transform: rotate(40deg) scale(.86); }
+    }
+
+    .wish {
+      min-height: 52px;
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.7rem;
+      margin-top: 12px;
+    }
+
+    /* =========================================================
+       SLIDE 3 — BEFORE ANYTHING ELSE
+    ========================================================= */
+    .intro {
+      background: linear-gradient(135deg, #fff9f3, #f0e4f4);
+    }
+
+    .intro-photo,
+    .letter-photo {
+      width: 180px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin: 0 auto 30px;
+      box-shadow: var(--shadow);
+      border: 7px solid rgba(255,255,255,.8);
+    }
+
+    .type-lines {
+      max-width: 750px;
+      margin: auto;
+    }
+
+    .type-line {
+      opacity: 0;
+      transform: translateY(15px);
+      animation: appear .8s ease forwards;
+      margin: 12px 0;
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.35rem, 3vw, 2.1rem);
+    }
+
+    .type-line:nth-child(2) { animation-delay: .8s; }
+    .type-line:nth-child(3) { animation-delay: 1.6s; }
+
+    @keyframes appear {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* =========================================================
+       SLIDE 4 — TIMELINE
+    ========================================================= */
+    .timeline-slide {
+      background: #fbf4ee;
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 12px;
+      margin-top: 35px;
+    }
+
+    .timeline-item {
+      border: 0;
+      background: rgba(255,255,255,.85);
+      border-radius: 20px;
+      padding: 20px 10px;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(55,25,35,.07);
+      transition: transform .25s ease;
+    }
+
+    .timeline-item:hover {
+      transform: translateY(-6px);
+    }
+
+    .timeline-dot {
+      width: 12px;
+      height: 12px;
+      background: var(--rose);
+      border-radius: 50%;
+      margin: 0 auto 12px;
+    }
+
+    .timeline-item strong {
+      display: block;
+      font-size: .82rem;
+    }
+
+    .timeline-item small {
+      color: var(--muted);
+    }
+
+    /* Decorative memory artwork used when there is no real photo. */
+    .memory-artwork {
+      min-height: 220px;
+      margin: 0 auto 22px;
+      max-width: 520px;
+      border-radius: 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background: radial-gradient(circle at 25% 20%, #fff8f7 0, transparent 38%),
+                  linear-gradient(135deg, #f9e3e8, #eee6f8 55%, #fff0df);
+      border: 1px solid rgba(141,48,77,.12);
+      box-shadow: inset 0 0 35px rgba(255,255,255,.5);
+      color: #8d304d;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .memory-artwork::before,
+    .memory-artwork::after {
+      content: "✦";
+      position: absolute;
+      color: rgba(141,48,77,.45);
+      font-size: 22px;
+    }
+    .memory-artwork::before { top: 22px; left: 28px; }
+    .memory-artwork::after { bottom: 20px; right: 30px; }
+    .memory-artwork .memory-symbol {
+      font-size: clamp(3.5rem, 10vw, 5rem);
+      line-height: 1.1;
+      filter: drop-shadow(0 8px 12px rgba(141,48,77,.14));
+    }
+    .memory-artwork .memory-art-caption {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      letter-spacing: .04em;
+      padding: 0 18px;
+    }
+
+    /* =========================================================
+       SLIDE 5 — POLAROID WALL
+    ========================================================= */
+    .photos-slide {
+      background: linear-gradient(135deg, #f8edf1, #f4eefa);
+    }
+
+    .polaroids {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 18px;
+      margin-top: 25px;
+    }
+
+    .polaroid {
+      background: white;
+      padding: 9px 9px 15px;
+      box-shadow: 0 15px 30px rgba(50,20,35,.13);
+      cursor: pointer;
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .polaroid:nth-child(odd) { transform: rotate(-3deg); }
+    .polaroid:nth-child(even) { transform: rotate(3deg); }
+    .polaroid:hover {
+      transform: rotate(0) scale(1.06);
+      z-index: 5;
+      box-shadow: 0 22px 45px rgba(50,20,35,.22);
+    }
+
+    .polaroid img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+    }
+
+    .caption {
+      font-family: "Parisienne", cursive;
+      font-size: 1.15rem;
+      margin-top: 8px;
+    }
+
+    /* =========================================================
+       SLIDE 6 — THINGS I LOVE
+    ========================================================= */
+    .love-slide {
+      background: radial-gradient(circle at top, #fff, #f9e9ef);
+    }
+
+    .love-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 35px;
+    }
+
+    .love-card {
+      min-height: 125px;
+      border: 1px solid rgba(141,48,77,.12);
+      border-radius: 22px;
+      padding: 20px;
+      background: rgba(255,255,255,.78);
+      cursor: pointer;
+      transition: transform .25s ease;
+    }
+
+    .love-card:hover {
+      transform: translateY(-5px) rotate(-1deg);
+    }
+
+    .love-card .cover {
+      font-family: "Parisienne", cursive;
+      font-size: 1.45rem;
+      color: var(--deep-rose);
+    }
+
+    .love-card .reason {
+      display: none;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .love-card.open .cover { display: none; }
+    .love-card.open .reason { display: block; }
+
+    /* =========================================================
+       SLIDE 7 — CONFESSIONS
+    ========================================================= */
+    .secret-list-slide {
+      color: white;
+      background: linear-gradient(145deg, #23121d, #4b2336);
+    }
+
+    .confessions {
+      max-width: 780px;
+      margin: 35px auto 0;
+      display: grid;
+      gap: 12px;
+    }
+
+    .confession {
+      padding: 18px 22px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      cursor: pointer;
+      text-align: left;
+      transition: background .25s ease;
+    }
+
+    .confession:hover {
+      background: rgba(255,255,255,.14);
+    }
+
+    .confession .hidden-text {
+      display: none;
+      color: #f1dfe5;
+      margin-top: 8px;
+    }
+
+    .confession.open .hidden-text {
+      display: block;
+    }
+
+    /* =========================================================
+       SLIDE 8 — PLAYLIST
+    ========================================================= */
+    .playlist-slide {
+      background: #eee8f4;
+    }
+
+    .player {
+      width: min(750px, 100%);
+      margin: 25px auto 0;
+      background: rgba(255,255,255,.75);
+      border: 1px solid rgba(50,30,50,.1);
+      border-radius: 30px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      text-align: left;
+    }
+
+    .track {
+      display: grid;
+      grid-template-columns: 50px 1fr auto;
+      gap: 14px;
+      align-items: center;
+      padding: 15px;
+      border-radius: 18px;
+      cursor: pointer;
+    }
+
+    .track:hover, .track.active {
+      background: rgba(217,201,232,.45);
+    }
+
+    .track-number {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: #fff;
+      color: var(--deep-rose);
+    }
+
+    .track-title { font-weight: 600; }
+    .track-description { font-size: .78rem; color: var(--muted); margin-top: 4px; }
+
+    /* =========================================================
+       SLIDE 9 — DISTANCE
+    ========================================================= */
+    .distance-slide {
+      color: white;
+      background: linear-gradient(135deg, #181126, #302248 50%, #211631);
+    }
+
+    .map {
+      position: relative;
+      width: min(850px, 90vw);
+      height: 250px;
+      margin: 30px auto;
+    }
+
+    .place {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .place.me { left: 5%; }
+    .place.her { right: 5%; }
+
+    .heart-person {
+      font-size: 2.2rem;
+    }
+
+    .place-name {
+      display: block;
+      margin-top: 8px;
+      color: #dfd0ea;
+    }
+
+    .connection {
+      position: absolute;
+      left: 17%;
+      right: 17%;
+      top: 50%;
+      height: 2px;
+      background: linear-gradient(90deg, #dba0b5, #e7c98b, #dba0b5);
+      box-shadow: 0 0 18px #e7c98b;
+    }
+
+    .travelling-heart {
+      position: absolute;
+      top: calc(50% - 20px);
+      left: 18%;
+      font-size: 1.4rem;
+      animation: travel 4s infinite ease-in-out;
+    }
+
+    @keyframes travel {
+      0%, 100% { left: 18%; }
+      50% { left: 80%; }
+    }
+
+    /* =========================================================
+       SLIDE 10 — RIGHT NOW
+    ========================================================= */
+    .cozy-slide {
+      background:
+        radial-gradient(circle at 20% 30%, rgba(218,178,126,.18), transparent 25%),
+        linear-gradient(135deg, #fff5e9, #f4e0d4);
+    }
+
+    .cozy-list {
+      max-width: 650px;
+      margin: 30px auto;
+      text-align: left;
+      display: grid;
+      gap: 13px;
+    }
+
+    .cozy-line {
+      background: rgba(255,255,255,.68);
+      border-radius: 18px;
+      padding: 16px 20px;
+      opacity: 0;
+      transform: translateX(-15px);
+    }
+
+    .slide.active .cozy-line {
+      animation: slideIn .6s ease forwards;
+    }
+
+    .cozy-line:nth-child(2) { animation-delay: .3s; }
+    .cozy-line:nth-child(3) { animation-delay: .6s; }
+    .cozy-line:nth-child(4) { animation-delay: .9s; }
+    .cozy-line:nth-child(5) { animation-delay: 1.2s; }
+
+    @keyframes slideIn {
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    /* =========================================================
+       SLIDE 11 — GIFTS
+    ========================================================= */
+    .gifts-slide {
+      background: linear-gradient(135deg, #fff8f2, #f2e7f5);
+    }
+
+    .gifts {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-top: 35px;
+    }
+
+    .gift {
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      min-height: 190px;
+    }
+
+    .gift-box {
+      position: relative;
+      width: 100px;
+      height: 85px;
+      margin: 0 auto 20px;
+      border-radius: 10px;
+      background: #c75d79;
+      transition: transform .3s ease;
+      box-shadow: 0 15px 25px rgba(80,30,50,.16);
+    }
+
+    .gift:hover .gift-box { transform: translateY(-8px) rotate(-2deg); }
+
+    .gift-box::before {
+      content: "";
+      position: absolute;
+      left: 42px;
+      top: 0;
+      width: 16px;
+      height: 100%;
+      background: #f0cf87;
+    }
+
+    .gift-box::after {
+      content: "";
+      position: absolute;
+      left: -5px;
+      top: -13px;
+      width: 110px;
+      height: 20px;
+      border-radius: 7px;
+      background: #d9708b;
+    }
+
+    .gift-message {
+      color: var(--deep-rose);
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.25rem;
+    }
+
+    /* =========================================================
+       SLIDE 12 — OPEN WHEN
+    ========================================================= */
+    .openwhen-slide {
+      background: #f7efe8;
+    }
+
+    .envelopes {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      max-width: 900px;
+      margin: 30px auto;
+    }
+
+    .envelope {
+      border: 1px solid rgba(141,48,77,.12);
+      background: #fffdfb;
+      border-radius: 18px;
+      padding: 22px;
+      cursor: pointer;
+      min-height: 100px;
+      transition: transform .25s ease;
+    }
+
+    .envelope:hover {
+      transform: translateY(-4px);
+    }
+
+    .envelope-message {
+      display: none;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: .88rem;
+    }
+
+    .envelope.open .envelope-message {
+      display: block;
+    }
+
+    /* =========================================================
+       SLIDE 13 — 100 REASONS
+    ========================================================= */
+    .reasons-slide {
+      color: white;
+      background: radial-gradient(circle at 50% 30%, #71334c, #27131e 65%);
+    }
+
+    #reasonNumber {
+      font-size: clamp(5rem, 16vw, 11rem);
+      color: #efcfd8;
+      line-height: .9;
+    }
+
+    #reasonText {
+      min-height: 90px;
+      max-width: 700px;
+      margin: 20px auto;
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.5rem, 3vw, 2.3rem);
+    }
+
+    /* =========================================================
+       SLIDE 14 — FUTURE
+    ========================================================= */
+    .future-slide {
+      background: linear-gradient(135deg, #f9f0e7, #eee8f4);
+    }
+
+    .bucket-list {
+      max-width: 750px;
+      margin: 25px auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      text-align: left;
+    }
+
+    .bucket {
+      background: rgba(255,255,255,.75);
+      border-radius: 16px;
+      padding: 14px 17px;
+      cursor: pointer;
+    }
+
+    .bucket.done {
+      text-decoration: line-through;
+      opacity: .55;
+    }
+
+    /* =========================================================
+       SLIDE 15 — ORIGINAL SONG
+    ========================================================= */
+    .song-slide {
+      color: white;
+      background:
+        radial-gradient(circle at 50% 45%, rgba(224,170,190,.22), transparent 30%),
+        linear-gradient(145deg, #17101a, #3d1c2d);
+    }
+
+    .song-card {
+      max-width: 680px;
+      margin: 25px auto;
+      padding: 35px;
+      border-radius: 30px;
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.12);
+      backdrop-filter: blur(15px);
+    }
+
+    .song-cover {
+      width: 130px;
+      height: 130px;
+      object-fit: cover;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,.25);
+    }
+
+    .song-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 2rem;
+    }
+
+    .equalizer {
+      height: 55px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      margin: 22px 0;
+    }
+
+    .bar {
+      width: 5px;
+      height: 15px;
+      border-radius: 10px;
+      background: #e4bdca;
+    }
+
+    .playing .bar {
+      animation: equalize .7s infinite alternate ease-in-out;
+    }
+
+    .bar:nth-child(2) { animation-delay: -.3s; }
+    .bar:nth-child(3) { animation-delay: -.6s; }
+    .bar:nth-child(4) { animation-delay: -.2s; }
+    .bar:nth-child(5) { animation-delay: -.5s; }
+    .bar:nth-child(6) { animation-delay: -.1s; }
+    .bar:nth-child(7) { animation-delay: -.4s; }
+
+    @keyframes equalize {
+      to { height: 48px; }
+    }
+
+    /* =========================================================
+       SLIDE 16 — LETTER
+    ========================================================= */
+    .letter-slide {
+      background: var(--cream);
+    }
+
+    .letter-paper {
+      width: min(780px, 100%);
+      margin: auto;
+      padding: 45px clamp(25px, 6vw, 70px);
+      background: #fffdfb;
+      box-shadow: var(--shadow);
+      border-radius: 8px;
+      text-align: left;
+    }
+
+    .letter-paper h2 {
+      text-align: center;
+    }
+
+    .editable-letter {
+      margin-top: 25px;
+      min-height: 300px;
+      padding: 22px;
+      border: 1px dashed rgba(141,48,77,.28);
+      border-radius: 15px;
+      color: var(--muted);
+      line-height: 1.9;
+      white-space: pre-wrap;
+      outline: none;
+    }
+
+    .editable-letter:focus {
+      border-color: var(--rose);
+      color: var(--ink);
+    }
+
+    /* =========================================================
+       SLIDE 17 — WAIT
+    ========================================================= */
+    .wait-slide {
+      color: white;
+      background: #171018;
+    }
+
+    .wait-text {
+      min-height: 160px;
+      display: grid;
+      place-items: center;
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.5rem, 7vw, 5rem);
+    }
+
+    #lastPresent {
+      display: none;
+    }
+
+    /* =========================================================
+       SLIDE 18 — FINAL SURPRISE
+    ========================================================= */
+    .final-slide {
+      color: white;
+      background:
+        radial-gradient(circle at 50% 45%, rgba(255,197,210,.18), transparent 28%),
+        linear-gradient(145deg, #321421, #160d14);
+    }
+
+    .final-promise {
+      max-width: 700px;
+      margin: 30px auto;
+      padding: 25px;
+      border: 1px dashed rgba(255,255,255,.25);
+      border-radius: 20px;
+      outline: none;
+      color: #eadde2;
+      min-height: 130px;
+      text-align: left;
+    }
+
+    /* =========================================================
+       SLIDE 19 — FUNNY ENDING
+    ========================================================= */
+    .funny-slide {
+      background: linear-gradient(135deg, #fff8f2, #f1e4f3);
+    }
+
+    #embarrassingReveal {
+      display: none;
+      margin-top: 25px;
+    }
+
+    .funny-photo {
+      width: min(350px, 80vw);
+      max-height: 400px;
+      object-fit: cover;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    /* =========================================================
+       MODALS
+    ========================================================= */
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      display: none;
+      place-items: center;
+      padding: 20px;
+      background: rgba(20,10,18,.68);
+      backdrop-filter: blur(8px);
+    }
+
+    .modal.show {
+      display: grid;
+    }
+
+    .modal-card {
+      width: min(620px, 100%);
+      max-height: 85vh;
+      overflow: auto;
+      background: #fffdfb;
+      border-radius: 25px;
+      padding: 30px;
+      box-shadow: 0 30px 80px rgba(0,0,0,.25);
+      text-align: center;
+      position: relative;
+    }
+
+    .modal-card img {
+      width: min(330px, 100%);
+      max-height: 360px;
+      object-fit: cover;
+      border-radius: 18px;
+      margin-bottom: 18px;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 12px;
+      right: 15px;
+      border: 0;
+      background: transparent;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    /* =========================================================
+       MOBILE DESIGN
+    ========================================================= */
+    @media (max-width: 800px) {
+      .slide {
+        padding: 62px 18px 82px;
+      }
+
+      .timeline {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .polaroids {
+        grid-template-columns: repeat(2, 1fr);
+        max-height: 65vh;
+        overflow-y: auto;
+        padding: 10px;
+      }
+
+      .love-grid {
+        grid-template-columns: repeat(2, 1fr);
+        max-height: 62vh;
+        overflow-y: auto;
+        padding: 4px;
+      }
+
+      .gifts {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .envelopes {
+        grid-template-columns: 1fr 1fr;
+        max-height: 65vh;
+        overflow-y: auto;
+      }
+
+      .bucket-list {
+        grid-template-columns: 1fr;
+        max-height: 58vh;
+        overflow-y: auto;
+      }
+
+      .map {
+        height: 220px;
+      }
+
+      .connection {
+        left: 25%;
+        right: 25%;
+      }
+
+      .place.me { left: 0; }
+      .place.her { right: 0; }
+
+      .letter-paper {
+        max-height: 75vh;
+        overflow-y: auto;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .timeline {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .polaroids {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .envelopes {
+        grid-template-columns: 1fr;
+      }
+
+      .track {
+        grid-template-columns: 42px 1fr;
+      }
+
+      .track button {
+        grid-column: 2;
+      }
+    }
+
+    /* Accessibility: people who prefer reduced motion get simpler effects. */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Floating hearts/stars are created by JavaScript. -->
+  <div id="particles"></div>
+
+  <!-- Progress indicator -->
+  <div id="progress">
+    <div id="progressTrack"><div id="progressFill"></div></div>
+    <span id="progressText">1 / 18</span>
+  </div>
+
+  <main id="story">
+
+    <!-- =======================================================
+         SLIDE 1 — THE SECRET DOOR
+         EDIT THIS:
+         Change the two messages and button text below.
+         The background is controlled by .secret in CSS.
+    ======================================================== -->
+    <section class="slide secret active" data-title="The Secret Door">
+      <div class="content">
+        <div class="eyebrow">A tiny world made for you</div>
+
+        <!-- EDIT THIS: First message -->
+        <h1>I made something for you...</h1>
+
+        <!-- EDIT THIS: Promise message -->
+        <p class="promise">but you have to promise you'll smile first 🥺</p>
+
+        <!-- EDIT THIS: Button text -->
+        <button class="btn" onclick="nextSlide()">I promise ♡</button>
+      </div>
+
+      <!-- =====================================================
+           SLIDE NAVIGATION
+           These buttons are on EVERY slide.
+           BACK = previous slide
+           NEXT = next slide
+           You can change the button text here if you want.
+      ====================================================== -->
+      <div class="slide-navigation">
+        <button class="slide-nav-btn back-btn" onclick="previousSlide()">← Back</button>
+        <button class="slide-nav-btn next-btn" onclick="nextSlide()">Next →</button>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         SLIDE 2 — BIRTHDAY REVEAL
+         EDIT THIS:
+         Her name is automatically taken from the customization
+         section near the bottom of this file.
+    ======================================================== -->
+    <section class="slide reveal" data-title="Birthday Reveal">
+      <div class="content">
+        <div class="eyebrow">Today is yours</div>
+
+        <h1>Happy Birthday <span class="name-target"></span> ♡</h1>
+
+        <!-- EDIT THIS: Birthday subtitle -->
+        <p class="promise">
+          Today isn't just another day.<br>
+          It's the day my favourite person came into this world.
+        </p>
+
+        <div class="cake" aria-label="Birthday cake">
+          <div class="cake-base"></div>
+          <div class="cake-cream"></div>
+
+          <!-- Click the candle to blow it out. -->
+          <div class="candle" onclick="blowCandle()">
+            <div id="flame" class="flame"></div>
+          </div>
+        </div>
+
+        <div id="wish" class="wish"></div>
+        <div id="cakeHint" class="soft" style="color:#f8dfe7;">
+          Tap the candle ♡
+        </div>
+      </div>
+
+      <!-- =====================================================
+           SLIDE NAVIGATION
+           These buttons are on EVERY slide.
+           BACK = previous slide
+           NEXT = next slide
+           You can change the button text here if you want.
+      ====================================================== -->
+      <div class="slide-navigation">
+        <button class="slide-nav-btn back-btn" onclick="previousSlide()">← Back</button>
+        <button class="slide-nav-btn next-btn" onclick="nextSlide()">Next →</button>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         SLIDE 3 — BEFORE ANYTHING ELSE
+         PHOTO 1:
+         What photo? A beautiful solo picture of her.
+         Filename: her-intro.jpg
+         Folder: images/
+         Put it at: birthday-website/images/her-intro.jpg
+         EDIT THIS PHOTO in the <img> below if filename changes.
+    ======================================================== -->
+    <section class="slide intro" data-title="Before Anything Else">
+      <div class="content">
+
+        <!-- PHOTO 1 — EDIT THIS: her-intro.jpg -->
+        <img class="intro-photo"
+             src="images/her-intro.jpg"
+             alt="A beautiful photo of her">
+
+        <div class="type-lines">
+          <!-- EDIT THIS: Personal line -->
+          <div class="type-line">I don't know if I can fit everything I feel for you into a website...</div>
+
+          <!-- EDIT THIS: Personal line -->
+          <div class="type-line">but I'm going to try.</div>
+
+          <!-- EDIT THIS: Personal line -->
+          <div class="type-line">So this is my little birthday gift to you.</div>
+        </div>
+
+        <!-- EDIT THIS: Button -->
+        <button class="btn secondary" onclick="nextSlide()">Let's go back to the beginning →</button>
+      </div>
+
+      <!-- =====================================================
+           SLIDE NAVIGATION
+           These buttons are on EVERY slide.
+           BACK = previous slide
+           NEXT = next slide
+           You can change the button text here if you want.
+      ====================================================== -->
+      <div class="slide-navigation">
+        <button class="slide-nav-btn back-btn" onclick="previousSlide()">← Back</button>
+        <button class="slide-nav-btn next-btn" onclick="nextSlide()">Next →</button>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         SLIDE 4 — OUR STORY
+         Timeline cards are generated from the timelineMemories
+         array in EASY CUSTOMIZATION.
+    ======================================================== -->
+    <section class="slide timeline-slide" data-title="Our Story">
+      <div class="content">
+        <div class="eyebrow">Chapter one</div>
+        <h2>Our story, so far.</h2>
+
+        <!-- Timeline items are automatically inserted here. -->
+        <div id="timeline" class="timeline"></div>
+      </div>
+
+      <!-- =====================================================
+           SLIDE NAVIGATION
+           These buttons are on EVERY slide.
+           BACK = previous slide
+           NEXT = next slide
+           You can change the button text here if you want.
+      ====================================================== -->
+      <div class="slide-navigation">
+        <button class="slide-nav-btn back-btn" onclick="previousSlide()">← Back</button>
+        <button class="slide-nav-btn next-btn" onclick="nextSlide()">Next →</button>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         SLIDE 5 — PHOTO WALL
+         The 10 photos are controlled by photoWall in EASY CUSTOMIZATION.
+         Each object tells JavaScript which image and caption to use.
+    ======================================================== -->
+    <section class="slide photos-slide" data-title="My Favourite Pictures">
+      <div class="content">
+        <div class="eyebrow">A small collection</div>
+        <h2>My favourite pictures of you</h2>
+        <p class="soft">Click any photo. Some pictures deserve to be looked at a little longer.</p>
+
+        <div id="polaroids" class="polaroids"></div>
+      </div>
+
+      <!-- =====================================================
+           SLIDE NAVIGATION
+           These buttons are on EVERY slide.
+           BACK = previous slide
+           NEXT = next slide
+           You can change the button text here if you want.
+      ====================================================== -->
+      <div class="slide-navigation">
+        <button class="slide-nav-btn back-btn" onclick="previousSlide()">← Back</button>
+        <button class="slide-nav-btn next-btn" onclick="nextSlide()">Next →</button>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         SLIDE 6 — THINGS I LOVE
+    ======================================================== -->
+    <section class="slide love-slide" data-title="Things I Love">
+      <div class="content">
+        <div class="eyebrow">The list could be endless</div>
+        <h2>There are approximately 847 things I love about you...</h2>
+        <p class="soft">Here are a few ♡ — click a card to open it.</p>
+
+        <div id="loveGrid" class="love-grid"></div>
+      </div>
+
+      <!-- =====================================================
+           SLIDE NAVIGATION
+           These buttons are on EVERY slide.
+           BACK = previous slide
+           NEXT = next slide
+           You can change the button text here if you want.
+      ====================================================== -->
+      <div class="slide-navigation">
+        <button class="slide-nav-btn back-btn" onclick="previousSlide()">← Back</button>
+        <button class="slide-nav-btn next-btn" onclick="nextSlide()">Next →</button>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         SLIDE 7 — THINGS YOU DON'T KNOW
+    ======================================================== -->
+    <section class="slide secret-list-slide" data-title="Things You Don't Know">
+      <div class="content">
+        <div class="eyebrow">A few confessions</div>
+        <h2>Things I've never properly told you...</h2>
+        <div id="confessions" class="confessions"></div>
+      </div>
+
+      <!-- =====================================================
+           SLIDE NAVIGATION
+           These buttons are on EVERY slide.
+           BACK = previous slide
+           NEXT = next slide
+           You can change the button text here if you want.
+      ====================================================== -->
+      <div class="slide-navigation">
+        <button class="slide-nav-btn back-btn" onclick="previousSlide()">← Back</button>
+        <button class="slide-nav-btn next-btn" onclick="nextSlide()">Next →</button>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         SLIDE 8 — PLAYLIST
+         Audio filenames and descriptions are controlled in the
+         playlistSongs array.
+    ======================================================== -->
+    <section class="slide playlist-slide" data-title="Our Playlist">
+      <div class="content">
+        <div class="eyebrow">If our relationship was a playlist</div>
+        <h2>Songs that remind me of you</h2>
+
+        <div class="player">
+          <div id="playlist"></div>
+          <audio id="playlistAudio" controls style="width:100%; margin-top:15px;"></audio>
+          <p class="soft" style="margin-top:12px; font-size:.78rem;">
+          </p>
+        </div>
+      </div>
+
+      <!-- =====================================================
+           SLIDE NAVIGATION
+           These buttons are on EVERY slide.
+           BACK = previous slide
+           NEXT = next slide
+           You can change the button text here if you want.
+      ====================================================== -->
+      <div class="slide-navigation">
+        <button class="slide-nav-btn back-btn" onclick="previousSlide()">← Back</button>
+        <button class="slide-nav-btn next-btn" onclick="nextSlide()">Next →</button>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         SLIDE 9 — DISTANCE
+         City names come from EASY CUSTOMIZATION.
+    ======================================================== -->
+    <section class="slide distance-slide" data-title="If Distance Didn't Exist">
+      <div class="content">
+        <div class="eyebrow">The hardest part</div>
+        <h2>If distance didn't exist...</h2>
+
+        <div class="map">
+          <div class="connection"></div>
+          <div class="travelling-heart">❤️</div>
+
+          <div class="place me">
+            <div class="heart-person">❤️</div>
+            <strong>ME</strong>
+            <span id="myCityDisplay" class="place-name"></span>
+          </div>
+
+          <div class="place her">
+            <div class="heart-person">❤️</div>
+            <strong>YOU</strong>
+            <span id="herCityDisplay" class="place-name"></span>
+          </div>
+        </div>
+
+        <!-- EDIT THIS: Replace these messages if you want. -->
+        <p class="promise">I hate that I can't be there today.</p>
+        <p class="promise">If I could, I'd be standing at your door right now...</p>
+        <p class="promise">Until I can actually hug you, this website will have to do.</p>
+
+        <div style="font-size:2.5rem; margin-top:20px;">❤️ ← → ❤️</div>
+      </div>
+
+      <!-- =====================================================
+           SLIDE NAVIGATION
+           These buttons are on EVERY slide.
+           BACK = previous slide
+           NEXT = next slide
+           You can change the button text here if you want.
+      ====================================================== -->
+      <div class="slide-navigation">
+        <button class="slide-nav-btn back-btn" onclick="previousSlide()">← Back</button>
+        <button class="slide-nav-btn next-btn" onclick="nextSlide()">Next →</button>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         SLIDE 10 — IF I WERE WITH YOU RIGHT NOW
+    ======================================================== -->
+    <section class="slide cozy-slide" data-title="If I Were With You">
+      <div class="content">
+        <div class="eyebrow">The imaginary birthday plan</div>
+        <h2>If I were with you right now...</h2>
+
+        <div id="cozyList" class="cozy-list"></div>
+
+        <!-- EDIT THIS: Final line -->
+        <p style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;margin-top:25px;">
+          And I'd probably never want to let go.
+        </p>
+      </div>
+
+      <!-- =====================================================
+           SLIDE NAVIGATION
+           These buttons are on EVERY slide.
+           BACK = previous slide
+           NEXT = next slide
+           You can change the button text here if you want.
+      ====================================================== -->
+      <div class="slide-navigation">
+        <button class="slide-nav-btn back-btn" onclick="previousSlide()">← Back</button>
+        <button class="slide-nav-btn next-btn" onclick="nextSlide()">Next →</button>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         SLIDE 11 — BIRTHDAY GIFTS
+    ======================================================== -->
+    <section class="slide gifts-slide" data-title="Birthday Gifts">
+      <div class="content">
+        <div class="eyebrow">A few completely serious presents</div>
+        <h2>Birthday gifts</h2>
+        <p class="soft">Click a gift to open it.</p>
+        <div id="gifts" class="gifts"></div>
+      </div>
+
+      <!-- =====================================================
+           SLIDE NAVIGATION
+           These buttons are on EVERY slide.
+           BACK = previous slide
+           NEXT = next slide
+           You can change the button text here if you want.
+      ====================================================== -->
+      <div class="slide-navigation">
+        <button class="slide-nav-btn back-btn" onclick="previousSlide()">← Back</button>
+        <button class="slide-nav-btn next-btn" onclick="nextSlide()">Next →</button>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         SLIDE 12 — OPEN WHEN
+    ======================================================== -->
+    <section class="slide openwhen-slide" data-title="Open When">
+      <div class="content">
+        <div class="eyebrow">For the days I'm not there</div>
+        <h2>Open when...</h2>
+        <p class="soft">Write your real messages in the openWhenMessages array.</p>
+        <div id="openWhen" class="envelopes"></div>
+      </div>
+
+      <!-- =====================================================
+           SLIDE NAVIGATION
+           These buttons are on EVERY slide.
+           BACK = previous slide
+           NEXT = next slide
+           You can change the button text here if you want.
+      ====================================================== -->
+      <div class="slide-navigation">
+        <button class="slide-nav-btn back-btn" onclick="previousSlide()">← Back</button>
+        <button class="slide-nav-btn next-btn" onclick="nextSlide()">Next →</button>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         SLIDE 13 — 100 REASONS
+    ======================================================== -->
+    <section class="slide reasons-slide" data-title="100 Reasons">
+      <div class="content">
+        <div class="eyebrow">I could keep going</div>
+        <h2>100 Reasons Why I Love You</h2>
+
+        <div id="reasonNumber">1</div>
+        <div id="reasonText"></div>
+
+        <button class="btn" onclick="nextReason()">Give me another reason ♡</button>
+      </div>
+
+      <!-- =====================================================
+           SLIDE NAVIGATION
+           These buttons are on EVERY slide.
+           BACK = previous slide
+           NEXT = next slide
+           You can change the button text here if you want.
+      ====================================================== -->
+      <div class="slide-navigation">
+        <button class="slide-nav-btn back-btn" onclick="previousSlide()">← Back</button>
+        <button class="slide-nav-btn next-btn" onclick="nextSlide()">Next →</button>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         SLIDE 14 — FUTURE
+    ======================================================== -->
+    <section class="slide future-slide" data-title="Our Future">
+      <div class="content">
+        <div class="eyebrow">Things I still want to do with you</div>
+        <h2>Our little future bucket list</h2>
+
+        <div id="bucketList" class="bucket-list"></div>
+
+        <p class="script" style="font-size:2.4rem;margin-top:25px;">To be continued...</p>
+      </div>
+
+      <!-- =====================================================
+           SLIDE NAVIGATION
+           These buttons are on EVERY slide.
+           BACK = previous slide
+           NEXT = next slide
+           You can change the button text here if you want.
+      ====================================================== -->
+      <div class="slide-navigation">
+        <button class="slide-nav-btn back-btn" onclick="previousSlide()">← Back</button>
+        <button class="slide-nav-btn next-btn" onclick="nextSlide()">Next →</button>
+      </div>
+    </section>
+
+    <!-- Original-song slide removed as requested. -->
+
+
+
+    <!-- =======================================================
+         SLIDE 16 — THE LETTER
+         Write your actual letter in the contenteditable area.
+         It is intentionally short/default so YOU write the real one.
+    ======================================================== -->
+    <section class="slide letter-slide" data-title="The Letter">
+      <div class="content">
+        <div class="letter-paper">
+
+          <!-- OPTIONAL PHOTO:
+               PHOTO: A favourite photo of the two of you.
+               Filename: us-together.jpg
+               Folder: images/
+               Change the src below if needed.
+          -->
+          <img class="letter-photo"
+               src="images/us-together.jpg"
+               alt="A photo of us">
+
+          <h2>To My Favourite Person</h2>
+
+          <!-- =================================================
+               EDIT THIS: WRITE YOUR REAL LETTER HERE.
+               Click inside the box and type your letter.
+               Suggested structure:
+               1. Start with how you feel about her.
+               2. Mention specific memories.
+               3. Tell her what she means to you.
+               4. Say what you're grateful for.
+               5. Mention the distance if it feels right.
+               6. End with a birthday wish.
+          ================================================== -->
+          <div class="editable-letter" contenteditable="true">
+Dear Kinnu,
+
+jo ai generated photo upar dikh rhi hai na use dekh ke hamesha 
+sochta  hu ye kab hoga sach me, aur kitna wait karna padega hame😭. 
+Ab aur nhi hota kyuki day by day mera pyaar badhta jaa rha tumhare liye 
+aur ab to itna badh gyi hai ki agar ek din baat na ho tumse to din 
+hi acha nhi lagta aur ye sach hai. Mera pyaar ab itna badh gya hai 
+ki jab tumhe in real  dekhunga to believe nhi hoga ki kya ye shi hai
+are you real ya ye bhi unhi sapno me se ek hai jo har roz dekhta hu 
+tumse milne ke
+
+I Love You The Most,
+Your Love
+          </div>
+        </div>
+      </div>
+
+      <!-- =====================================================
+           SLIDE NAVIGATION
+           These buttons are on EVERY slide.
+           BACK = previous slide
+           NEXT = next slide
+           You can change the button text here if you want.
+      ====================================================== -->
+      <div class="slide-navigation">
+        <button class="slide-nav-btn back-btn" onclick="previousSlide()">← Back</button>
+        <button class="slide-nav-btn next-btn" onclick="nextSlide()">Next →</button>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         SLIDE 17 — ONE LAST THING
+    ======================================================== -->
+    <section class="slide wait-slide" data-title="One Last Thing">
+      <div class="content">
+        <div id="waitText" class="wait-text">Wait...</div>
+
+        <div id="lastPresent">
+          <p style="font-family:'Cormorant Garamond',serif;font-size:2rem;">
+            There's one more present.
+          </p>
+
+          <!-- EDIT THIS: Button -->
+          <button class="btn" onclick="nextSlide()">OPEN IT 🎁</button>
+        </div>
+      </div>
+
+      <!-- =====================================================
+           SLIDE NAVIGATION
+           These buttons are on EVERY slide.
+           BACK = previous slide
+           NEXT = next slide
+           You can change the button text here if you want.
+      ====================================================== -->
+      <div class="slide-navigation">
+        <button class="slide-nav-btn back-btn" onclick="previousSlide()">← Back</button>
+        <button class="slide-nav-btn next-btn" onclick="nextSlide()">Next →</button>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         SLIDE 18 — FINAL SURPRISE
+    ======================================================== -->
+    <section class="slide final-slide" data-title="The Promise">
+      <div class="content">
+        <div class="eyebrow">One last thing</div>
+
+        <h1 style="font-size:clamp(3rem,8vw,6rem);">You.</h1>
+
+        <!-- EDIT THIS: Personal final messages -->
+        <p class="promise">You're the best thing that ever happened to me.</p>
+        <p class="promise">So I guess the last present isn't actually for you.</p>
+
+        <p style="font-family:'Cormorant Garamond',serif;font-size:2rem;margin-top:25px;">
+          It's a promise from me.
+        </p>
+
+        <!-- EDIT THIS: Write your own promise. -->
+        <div class="final-promise" contenteditable="true">
+Ek promise to pehle se kiya tha hamesha sorry bolne ka aur vo jindagi bhar nibhata rahunga but aaj special day pe ek aur promise karta hu ki agar jinda raha to tumhara 100th birthday tak saare saath hi manaunga😘
+        </div>
+
+        <!-- EDIT THIS: Final message -->
+        <h2 style="margin-top:20px;">Happy Birthday, my love. ❤️</h2>
+      </div>
+
+      <!-- =====================================================
+           SLIDE NAVIGATION
+           These buttons are on EVERY slide.
+           BACK = previous slide
+           NEXT = next slide
+           You can change the button text here if you want.
+      ====================================================== -->
+      <div class="slide-navigation">
+        <button class="slide-nav-btn back-btn" onclick="previousSlide()">← Back</button>
+        <button class="slide-nav-btn next-btn" onclick="nextSlide()">Next →</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================================
+       MODAL FOR TIMELINE / PHOTO DETAILS
+  ========================================================= -->
+  <div id="modal" class="modal" onclick="closeModal(event)">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <button class="close-modal" onclick="closeModal()">×</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+
+  <script>
+    /* =========================================================
+       ==================== EASY CUSTOMIZATION ====================
+       =========================================================
+       THIS IS THE MOST IMPORTANT PART FOR YOU.
+
+       You can personalize most of the website without touching
+       the rest of the JavaScript.
+
+       Just replace the words inside quotation marks.
+
+       Example:
+       const girlfriendName = "HER NAME";
+       becomes:
+       const girlfriendName = "Aarohi";
+
+       Do NOT remove quotation marks around normal text.
+    ========================================================= */
+
+    // EDIT THIS: Her name
+    const girlfriendName = "My Kitkat";
+
+    // EDIT THIS: Your name
+    const myName = "Your Panda🐼";
+
+    // EDIT THIS: Your city
+    const myCity = "Pune";
+
+    // EDIT THIS: Her city
+    const herCity = "Bhopal";
+
+    // EDIT THIS: Your relationship start date
+    const relationshipStartDate = "25 july 2026";
+
+  
+    // =========================================================
+    // EDIT THIS: TIMELINE MEMORIES
+    // You can change the title, date, memory, message and photo.
+    //
+    // For each photo:
+    // - Put it in images/
+    // - Example filename: timeline-meeting.jpg
+    // - Then put that exact filename in "photo".
+    // =========================================================
+    const timelineMemories = [
+      {
+        title: "The day you first texted",
+        date: "28/01/2025",
+        memory: "exam ke liye all the best bolne ko",
+        message: "khush to bahut hua tha mai us din",
+      },
+      {
+        title: "Our first conversation",
+        date: "29/01/2025",
+        memory: "exam jaisa bhi gya ho lekin us raat baat karke maja to aaya tha",
+        message: "us din to khushi satve aasman pe thi",
+      },
+      {
+        title: "You made me smile like an idiot",
+        date: "23/07/2026",
+        memory: "when you said haa to meri pehle se thi",
+        message: "do din tak pagalo ki tarah smile karta ghum raha tha mai",
+      },
+      {
+        title: "My special memory with you",
+        date: "date to yaad nhi 😅",
+        memory: "bus me tumhare kandhe pe sir rakh ke sona was like heaven",
+        message: "vo feeling hi alag thi can't describe in words",
+      },
+      {
+        title: "The first 'I love you'",
+        date: "01/01/2026",
+        memory: "wǒ ài nǐ new year pe humoursly ye bola tha mai aur aapka koi response hi nhi tha😭",
+        message: "ye bolne ke pehle kitna sochna pada tha pata bhi hai tumhe😅",
+      },
+      {
+        title: "Today ❤️",
+        date: "18/11/2026",
+        memory: "Today I get to celebrate you.",
+        message: "2005 me is din dharti pe aake aapne sabse bada gift to mujhe diya hai😘",
+      }
+    ];
+
+    // =========================================================
+    // EDIT THIS: 10 PHOTO WALL PICTURES
+    //
+    // PHOTO 1 -> her-photo-1.jpg
+    // PHOTO 2 -> her-photo-2.jpg
+    // ...
+    //
+    // Put every file in the images/ folder.
+    // The caption can be anything you want.
+    // =========================================================
+    const photoWall = [
+      { file: "her-photo-1.jpg", caption: "That smile." },
+      { file: "her-photo-2.jpg", caption: "My favourite face." },
+      { file: "her-photo-3.jpg", caption: "I stared at this for too long." },
+      { file: "her-photo-4.jpg", caption: "How are you this pretty?" },
+      { file: "her-photo-5.jpg", caption: "Cutest one ♡" },
+      { file: "her-photo-6.jpg", caption: "Forever saving these." },
+      { file: "her-photo-7.jpg", caption: "You, being you." },
+      { file: "her-photo-8.jpg", caption: "One of my favourites." },
+      { file: "her-photo-9.jpg", caption: "I love this picture." },
+      { file: "her-photo-10.jpg", caption: "Okay, you're gorgeous." }
+    ];
+
+    // =========================================================
+    // EDIT THIS: THINGS I LOVE ABOUT YOU
+    // Each item becomes a clickable card.
+    // =========================================================
+    const loveReasons = [
+      "The way you get excited about the smallest things.",
+      "The way you say me kutte when angry.",
+      "Your smile.",
+      "How you make my ordinary days feel special.",
+      "Your random little habits.",
+      "The way you care.",
+      "Your 'pata hai aaj kya hua'.",
+      "I could keep going forever."
+    ];
+
+    // =========================================================
+    // EDIT THIS: THINGS YOU DON'T KNOW
+    // These are intentionally examples. Replace them with REAL
+    // things you have actually done/felt.
+    // =========================================================
+    const confessions = [
+      "None of your pictures are same to me so don't think that i already have many of your photos they are always less.",
+      "Jab bhi mummy bolti thi ki dekhna teri wali to mujhse bhi choti hogi height me, then I always thought of you and smiled.",
+      "I still have that childhood photo that you asked me to delete.",
+      "Sometimes I smile randomly because of something you said nights before."
+    ];
+
+    // =========================================================
+    // EDIT THIS: PLAYLIST
+    //
+    // audio = file inside audio/
+    // Example: "our-song.mp3"
+    //
+    // IMPORTANT: Your browser may not play every audio format.
+    // MP3 is the safest simple choice.
+    // =========================================================
+    const playlistSongs = [
+      {
+        title: "Tum Se",
+        artist: "Sachin Jigar",
+        audio: "our-song.mp3",
+        description: "Mera sab kuch tum se hi hai."
+      },
+      {
+        title: "Raintalk",
+        artist: "Aditya Bhardwaj",
+        audio: "song-two.mp3",
+        description: "Barish me sath bheegne ki wish."
+      },
+      {
+        title: "Jab Tak",
+        artist: "Armaan Malik",
+        audio: "song-three.mp3",
+        description: "Mere paas tum raho jaane ki baat na karo."
+      },
+      {
+        title: "Die With A Smile",
+        artist: "Bruno Mars",
+        audio: "song-four.mp3",
+        description: "I want to be with you till the end."
+      }
+    ];
+
+    // =========================================================
+    // EDIT THIS: IF I WERE WITH YOU RIGHT NOW
+    // Replace these with your own imagined birthday plans.
+    // =========================================================
+    const cozyPlans = [
+      "🫂 Pehle to tumhe zor ki huggie deta jab tak man nhi bharta.",
+      "😘 Phir zor ki kissie deta jab tak saans na ruk jaye.",
+      "👫 Uske baad hatho me hath leke jaate kahi jo tumhari favourite jagah ho.",
+      "🎂 Phir tumhare muh me pura cake thusta mai aur wahi khata bhi baad me😋",
+      "🤗 And then pura din tumhare sath ghummi ghummi karta."
+    ];
+
+    // =========================================================
+    // EDIT THIS: BIRTHDAY GIFTS
+    // =========================================================
+    const birthdayGifts = [
+      {
+        title: "Gift #1",
+        label: "Unlimited hugs",
+        message: "whenever we meet I'll give you a hug."
+      },
+      {
+        title: "Gift #2",
+        label: "You can kiss me anytime you want",
+        message: "jaanta hu bahut bada gift hai lekin tumhare liye kuch bhi😅."
+      },
+      {
+        title: "Gift #3",
+        label: "One lifetime subscription for you to annoy me ❤️",
+        message: "Ab kuch nhi ho sakta ek baar aadat lag gyi hai hame tumhari ab nhi jaana kahi."
+      },
+      {
+        title: "Gift #4",
+        label: "One promise",
+        message: "Mai promise karta hu ab se mai bhi ladai karunga tumse kab tak tum akele mujhse naaraz hoti rahogi thak jaati hogi na bichari."
+      }
+    ];
+
+    // =========================================================
+    // EDIT THIS: OPEN WHEN
+    //
+    // IMPORTANT: Do not leave generic messages if you want this
+    // to feel personal. Replace each "example" message.
+    // =========================================================
+    const openWhenMessages = [
+      {
+        title: "💌 Open when you're sad",
+        message: "oyee tu sad kyu hai tu to gundi hai gunde log sad nhi hote be strong."
+      },
+      {
+        title: "💌 Open when you miss me",
+        message: "miss kar rhi hai to ye mat padh, sidha text kar."
+      },
+      {
+        title: "💌 Open when you can't sleep",
+        message: "neend nhi aa rhi to apni shakal dekh na mai to yahi karta hu jab neend nhi aati hamesha teri photo dekhta hu aa jati hai."
+      },
+      {
+        title: "💌 Open when you're angry at me",
+        message: "Kuch to kiya hoga maine aur uske liye abhi se sorry*1000."
+      },
+      {
+        title: "💌 Open when you need a reminder that you're loved",
+        message: "Ab tumhe remind karwana padega ki mai tumse pyaar karta hu, obviosly babu mai karta hu, love you😘."
+      },
+      {
+        title: "💌 Open when we had a fight",
+        message: "Galti to meri hi hogi aur agar tumhari hai bhi to koi dikkat nhi tum hamesha shi hoti ho pura hak hai tumhe mujhe sunane ka lado merese bas baat band na karna."
+      }
+    ];
+
+    // =========================================================
+    // EDIT THIS: 100 REASONS
+    //
+    // THIS IS THE ONLY PLACE YOU NEED TO EDIT THE 100 REASONS.
+    // You can use your own sentences.
+    //
+    // The sample placeholders are intentionally short.
+    // =========================================================
+    const reasons100 = [
+      "Tumhari smile",
+      "Tumhari zulfe",
+      "Tumhari aankhein",
+      "Tumhari cute si naak",
+      "Tumhari bholi si shakal",
+      "Tumhari maasoon si harkate",
+      "Tumhara bachpana",
+      "Tumhara har choti baat mujhe sunana",
+      "Tumhara 'aaj pata hai kya hua'",
+      "Tumhare nakhre",
+      "Tumhara ruth jana",
+      "Mera itna manane pe bhi na manna",
+      "Tumhari cute si naak pe bada sa gussa",
+      "Tumhare apne man ki karna",
+      "Tumhara mujhpe itna bharosa",
+      "Tumhari vo pyari awaj",
+      "Tumhari usi awaj me mujhe love you bolna",
+      "Vo love you sun liya tumhari awaj me to ye wala reason bhul gya",
+      "Jab bhi baat karni ho tumhara oyeeee bolke bulana",
+      "Tumhari jealousy jo hoti hai tumhe par batati nhi ho",
+      "Tumhare har ek moment ke snaps",
+      "Tumhari yapping",
+      "Topics khatam hone par bhi har jagah se baate lana",
+      "Meri kitni bhi kharab baat ho phir bhi pura sunna",
+      "Tumhara figure aaye haaye😍",
+      "Bold nature",
+      "Har baat muh pe bolna",
+      "Tumse baat karne pe mera pura mood change hona",
+      "Tumse baat karna aaj tak kabhi bore nhi laga",
+      "Tumhara 'oyeee' ka meesage",
+      "Tumhare saamne mai khud mai reh sakta hu",
+      "Tumhari har chiz ki excitement",
+      "Tumhara mujhse ghanto baat karna",
+      "Tumhara hona mujhe kismatwaala feel karata hai",
+      "Mai tumse kuch bhi keh sakta hu itna comfortable karna",
+      "Tumhara mujhe samajhna",
+      "Mere snaps maangne pe mujhe bhejhna",
+      "Tumhari vo flying kisses🫠",
+      "Itni dur rehke bhi mere itna pass mehsoos hona",
+      "Mujhe special feel karwana",
+      "Tumhari loyalty",
+      "Tumhari honesty",
+      "Tumhare saath bekaar se bekaar baat bhi special ho jati hai",
+      "Tumhari din bhar ki har baat mujhe detail me sunana",
+      "Aur mai na sunu to mujhe daant ke sunana",
+      "Tumhari baat baat pe jibh nikal ke beeee bolna",
+      "Tumhara bina kisi effort ke mujhe khush kar dena",
+      "Tumhari pagalpanti wali side",
+      "Tumhari notificstion se aaj bhi mujhe smile aa jana",
+      "Tumhara saaf aur acha dil",
+      "Tumhari vo side jo tum sabko nhi dikhati",
+      "Mere stupid jokes pe bhi hasna",
+      "Mere sabse special memories tumhare saath hi hai",
+      "Tumhare mujhe kutta bolna 🐶",
+      "Mera tumhare saath itna comfortable hona",
+      "Tumne sanjay ko bataya ki tumhara boyfriend chennai me hai",
+      "Itna khush hua tha mai vo sunke tum soch nhi sakte",
+      "Mere hi health ka dhyaaan rakhne ke liye mujhe hi dantna",
+      "Tumhara present me jina",
+      "Chat karte karte hi jhapki le lena",
+      "Tumhari din bhar ki bak bak sunna",
+      "Tumse baat karte hi mera gussa shant ho jana",
+      "Tumhara mere liye time nikalna",
+      "Tumhara bina kisi reason ke mujhe yaad karna",
+      "Tumhara mujhe apne secrets batana",
+      "Tumhara mujh par bharosa karna",
+      "Tumhara mujhse apni feelings share karna",
+      "Tumhara mujhe apne bachpan ki stories sunana",
+      "Tumhara mere saath hasna",
+      "Tumhara mere bure din ko thoda jhelne laayak bana dena",
+      "Tumhara mere saath bina kisi topic ke bhi connected rehna",
+      "Mera har song ki lyrics ko tumse relate karna",
+      "Tumhara mere saath spotlight reels share karna",
+      "Tumhara mere saath naye games khelna",
+      "Tumhara kabhi kabhi bina matlab mujhe tang karna",
+      "Tumhara meri silly harkaton ko tolerate karna",
+      "Tumhara apni galti accept na karna",
+      "Tumhara apne opinions rakhna",
+      "Tumhara apne loved ones ki care karna",
+      "Tumhara mere saath awkward silences ko bhi comfortable bana dena",
+      "Tumhara mujhe bina judge kiye sunna",
+      "Tumhara meri overthinking ko patiently sunna",
+      "Tumhara mere efforts notice karna",
+      "Tumhara mere liye genuinely happy hona",
+      "Tumhare saath pehli baar haath pakadne ka khayal",
+      "Tumhare saath baarish mein walk karne ka sapna",
+      "Tumhare saath naye street food try karne ka khayal",
+      "Tumhara mujhe motivate karna jab main khud par doubt karta hu",
+      "Tumhare liye choti choti surprises plan karna",
+      "Tumhare saath purani memories yaad karke hasna",
+      "Tumhare saath aur bhi bahut saari first memories banana",
+      "Tumhara dost se meri favourite person ban jaana",
+      "Tumhara mere liye sirf ek person nahi balki ek feeling ban jaana",
+      "Tumhare saath waqt ka pata hi na chalna",
+      "Tumhara mere dil mein ek aisi jagah banana jo sirf tumhari hai",
+      "Tumhara har outfit mein effortlessly pretty lagna",
+      "Tumse milne ke baad meri favourite love songs ka matlab badal jana",
+      "Tumhare chehre ka natural glow",
+      "Tumhe har naye outfit me dekhke har baar tumse aur jyada pyaar ho jana"
+    ];
+
+    // =========================================================
+    // EDIT THIS: FUTURE BUCKET LIST
+    // Click an item to mark it as done.
+    // =========================================================
+    const futureBucketList = [
+      "☐ Watch a sunrise together.",
+      "☐ Go on our first proper date.",
+      "☐ Take a ridiculous number of pictures.",
+      "☐ Make a picture album for only our photos",
+      "☐ have a late night walk while talking",
+      "☐ Cook together.",
+      "☐ Travel to our favourite places",
+      "☐ Have a movie night.",
+      "☐ Celebrate our every birthday together.",
+      "☐ Grow old together. ❤️"
+    ];
+
+    /* =========================================================
+       BASIC VARIABLES — YOU DON'T NEED TO EDIT BELOW HERE.
+    ========================================================= */
+
+    const slides = [...document.querySelectorAll(".slide")];
+    let currentSlide = 0;
+    let reasonIndex = 0;
+    let funnyStage = 0;
+    let candleBlown = false;
+
+    /* Helper: put text into all elements with a particular class. */
+    document.querySelectorAll(".name-target").forEach(el => {
+      el.textContent = girlfriendName;
+    });
+
+    document.getElementById("myCityDisplay").textContent = myCity;
+    document.getElementById("herCityDisplay").textContent = herCity;
+
+    // Change browser tab title using your chosen name.
+    document.title = `For ${girlfriendName} ❤️`;
+
+    /* =========================================================
+       SLIDE NAVIGATION
+    ========================================================= */
+
+    function showSlide(index) {
+      if (index < 0) index = 0;
+      if (index >= slides.length) index = slides.length - 1;
+
+      slides[currentSlide].classList.remove("active");
+      currentSlide = index;
+      slides[currentSlide].classList.add("active");
+
+      updateProgress();
+
+      /* Special behavior for slide 17. */
+      if (currentSlide === 16) {
+        startWaitSequence();
+      }
+
+      /* Add a little burst whenever a new slide opens. */
+      burstParticles();
+    }
+
+    function nextSlide() {
+      if (currentSlide < slides.length - 1) {
+        showSlide(currentSlide + 1);
+      }
+    }
+
+    function previousSlide() {
+      if (currentSlide > 0) {
+        showSlide(currentSlide - 1);
+      }
+    }
+
+    function updateSlideButtons() {
+      slides.forEach((slide, index) => {
+        const backButton = slide.querySelector(".back-btn");
+        const nextButton = slide.querySelector(".next-btn");
+
+        if (backButton) backButton.disabled = index === 0;
+        if (nextButton) nextButton.disabled = index === slides.length - 1;
+
+        // The final slide does not need a "Next" button because there is no next slide.
+        if (nextButton && index === slides.length - 1) {
+          nextButton.textContent = "The End ♡";
+        }
+      });
+    }
+
+    function updateProgress() {
+      const percentage = ((currentSlide + 1) / slides.length) * 100;
+      document.getElementById("progressFill").style.width = percentage + "%";
+      document.getElementById("progressText").textContent =
+        `${currentSlide + 1} / ${slides.length}`;
+
+      updateSlideButtons();
+    }
+
+    /* Arrow-key navigation. */
+    document.addEventListener("keydown", event => {
+      if (document.querySelector(".modal.show")) {
+        if (event.key === "Escape") closeModal();
+        return;
+      }
+
+      if (event.key === "ArrowRight") nextSlide();
+      if (event.key === "ArrowLeft") previousSlide();
+    });
+
+    /* =========================================================
+       CANDLE
+    ========================================================= */
+
+    function blowCandle() {
+      if (candleBlown) return;
+
+      candleBlown = true;
+      // Reveal Back / Next only after the candle has been blown out.
+      slides[currentSlide].classList.add("candle-ready");
+      document.getElementById("flame").style.display = "none";
+      document.getElementById("cakeHint").textContent = "";
+
+      document.getElementById("wish").textContent = "Make a wish...";
+
+      setTimeout(() => {
+        document.getElementById("wish").innerHTML =
+          "I hope it comes true.<br>Although... I already got mine.<br>I got you. ❤️";
+        burstParticles(35);
+      }, 1700);
+    }
+
+    /* =========================================================
+       TIMELINE
+    ========================================================= */
+
+    function buildTimeline() {
+      const container = document.getElementById("timeline");
+
+      timelineMemories.forEach((item, index) => {
+        const button = document.createElement("button");
+        button.className = "timeline-item";
+        button.innerHTML = `
+          <div class="timeline-dot"></div>
+          <strong>${item.title}</strong>
+          <small>${item.date}</small>
+        `;
+
+        button.onclick = () => {
+          // Symbolic artwork replaces missing photos; the written memories stay untouched.
+          const memoryArt = [
+            { symbol: "💬", caption: "The message that started it all" },
+            { symbol: "🌙", caption: "One conversation became a memory" },
+            { symbol: "💗", caption: "The happiest little yes" },
+            { symbol: "🚌", caption: "A moment close to you" },
+            { symbol: "💌", caption: "Three little words, one big feeling" },
+            { symbol: "🎂", caption: "A day made special by you" }
+          ][index] || { symbol: "♡", caption: "A moment worth keeping" };
+          openModal(`
+            <div class="memory-artwork" role="img" aria-label="Illustration for ${item.title}">
+              <div class="memory-symbol">${memoryArt.symbol}</div>
+              <div class="memory-art-caption">${memoryArt.caption}</div>
+              <div style="font-size:1rem;letter-spacing:.25em;opacity:.8;">♡　✧　♡</div>
+            </div>
+            <h2 style="font-size:2.3rem;">${item.title}</h2>
+            <p><strong>${item.date}</strong></p>
+            <p style="margin-top:12px;">${item.memory}</p>
+            <p style="margin-top:12px;color:#8d304d;">${item.message}</p>
+          `);
+        };
+
+        container.appendChild(button);
+      });
+    }
+
+    /* =========================================================
+       PHOTO WALL
+    ========================================================= */
+
+    function buildPhotoWall() {
+      const container = document.getElementById("polaroids");
+
+      photoWall.forEach((photo, index) => {
+        const card = document.createElement("div");
+        card.className = "polaroid";
+
+        card.innerHTML = `
+          <img src="images/${photo.file}" alt="Photo ${index + 1}">
+          <div class="caption">${photo.caption}</div>
+        `;
+
+        card.onclick = () => {
+          openModal(`
+            <img src="images/${photo.file}" alt="Photo ${index + 1}">
+            <h3 style="font-size:2rem;">${photo.caption}</h3>
+            <p style="margin-top:8px;color:#806c75;">Photo ${index + 1} of ${photoWall.length}</p>
+          `);
+        };
+
+        container.appendChild(card);
+      });
+    }
+
+    /* =========================================================
+       LOVE REASONS
+    ========================================================= */
+
+    function buildLoveReasons() {
+      const container = document.getElementById("loveGrid");
+
+      loveReasons.forEach(reason => {
+        const card = document.createElement("button");
+        card.className = "love-card";
+
+        card.innerHTML = `
+          <span class="cover">Open me ♡</span>
+          <span class="reason">${reason}</span>
+        `;
+
+        card.onclick = () => card.classList.toggle("open");
+        container.appendChild(card);
+      });
+    }
+
+    /* =========================================================
+       CONFESSIONS
+    ========================================================= */
+
+    function buildConfessions() {
+      const container = document.getElementById("confessions");
+
+      confessions.forEach((text, index) => {
+        const item = document.createElement("button");
+        item.className = "confession";
+        item.innerHTML = `
+          <strong>Confession ${index + 1} ✦</strong>
+          <span class="hidden-text">${text}</span>
+        `;
+
+        item.onclick = () => item.classList.toggle("open");
+        container.appendChild(item);
+      });
+    }
+
+    /* =========================================================
+       PLAYLIST
+    ========================================================= */
+
+    function buildPlaylist() {
+      const container = document.getElementById("playlist");
+
+      playlistSongs.forEach((song, index) => {
+        const item = document.createElement("div");
+        item.className = "track";
+
+        item.innerHTML = `
+          <div class="track-number">${index + 1}</div>
+          <div>
+            <div class="track-title">${song.title} — ${song.artist}</div>
+            <div class="track-description">${song.description}</div>
+          </div>
+          <button class="btn secondary" style="margin:0;padding:8px 14px;">Play</button>
+        `;
+
+        item.onclick = () => {
+          document.querySelectorAll(".track").forEach(t => t.classList.remove("active"));
+          item.classList.add("active");
+
+          const audio = document.getElementById("playlistAudio");
+          audio.src = "audio/" + song.audio;
+
+          /* Browser rules mean the click is the safe place to start playback. */
+          audio.play().catch(() => {});
+        };
+
+        container.appendChild(item);
+      });
+    }
+
+    /* =========================================================
+       COZY PLANS
+    ========================================================= */
+
+    function buildCozyPlans() {
+      const container = document.getElementById("cozyList");
+
+      cozyPlans.forEach(text => {
+        const item = document.createElement("div");
+        item.className = "cozy-line";
+        item.textContent = text;
+        container.appendChild(item);
+      });
+    }
+
+    /* =========================================================
+       GIFTS
+    ========================================================= */
+
+    function buildGifts() {
+      const container = document.getElementById("gifts");
+
+      birthdayGifts.forEach(gift => {
+        const item = document.createElement("button");
+        item.className = "gift";
+
+        item.innerHTML = `
+          <div class="gift-box"></div>
+          <div class="gift-message">${gift.title}<br>${gift.label}</div>
+        `;
+
+        item.onclick = () => {
+          openModal(`
+            <div style="font-size:4rem;">🎁</div>
+            <h2 style="font-size:2.4rem;">${gift.label}</h2>
+            <p style="margin-top:12px;color:#806c75;">${gift.message}</p>
+          `);
+        };
+
+        container.appendChild(item);
+      });
+    }
+
+    /* =========================================================
+       OPEN WHEN
+    ========================================================= */
+
+    function buildOpenWhen() {
+      const container = document.getElementById("openWhen");
+
+      openWhenMessages.forEach(item => {
+        const card = document.createElement("button");
+        card.className = "envelope";
+
+        card.innerHTML = `
+          <strong>${item.title}</strong>
+          <div class="envelope-message">${item.message}</div>
+        `;
+
+        card.onclick = () => card.classList.toggle("open");
+        container.appendChild(card);
+      });
+    }
+
+    /* =========================================================
+       100 REASONS
+    ========================================================= */
+
+    function showReason() {
+      if (reasonIndex < reasons100.length) {
+        document.getElementById("reasonNumber").textContent = reasonIndex + 1;
+        document.getElementById("reasonText").textContent = reasons100[reasonIndex];
+      } else {
+        document.getElementById("reasonNumber").textContent = "♡";
+        document.getElementById("reasonText").textContent =
+          "And somehow, even 100 wasn't enough.";
+      }
+    }
+
+    function nextReason() {
+      if (reasonIndex < reasons100.length) {
+        reasonIndex++;
+        showReason();
+        burstParticles(8);
+      }
+    }
+
+    /* =========================================================
+       FUTURE BUCKET LIST
+    ========================================================= */
+
+    function buildBucketList() {
+      const container = document.getElementById("bucketList");
+
+      futureBucketList.forEach(text => {
+        const item = document.createElement("div");
+        item.className = "bucket";
+        item.textContent = text;
+
+        item.onclick = () => item.classList.toggle("done");
+        container.appendChild(item);
+      });
+    }
+
+    /* Original-song playback code removed with its slide. */
+
+    /* =========================================================
+       SLIDE 17 DELAYED REVEAL
+    ========================================================= */
+
+    let waitTimer1;
+    let waitTimer2;
+
+    function startWaitSequence() {
+      clearTimeout(waitTimer1);
+      clearTimeout(waitTimer2);
+
+      const text = document.getElementById("waitText");
+      const present = document.getElementById("lastPresent");
+
+      text.textContent = "Wait...";
+      present.style.display = "none";
+
+      waitTimer1 = setTimeout(() => {
+        text.textContent = "I forgot something.";
+      }, 1600);
+
+      waitTimer2 = setTimeout(() => {
+        text.style.display = "none";
+        present.style.display = "block";
+      }, 3300);
+    }
+
+    /* =========================================================
+       FUNNY EASTER EGG
+    ========================================================= */
+
+    function funnyStep() {
+      const title = document.getElementById("funnyTitle");
+      const button = document.getElementById("funnyButton");
+      const reveal = document.getElementById("embarrassingReveal");
+
+      funnyStage++;
+
+      if (funnyStage === 1) {
+        title.textContent = "NOW you can close it.";
+        button.textContent = "...unless you want to see something embarrassing 👀";
+      } else {
+        title.textContent = "You chose this.";
+        button.style.display = "none";
+        reveal.style.display = "block";
+        burstParticles(20);
+      }
+    }
+
+    /* =========================================================
+       MODAL
+    ========================================================= */
+
+    function openModal(html) {
+      document.getElementById("modalContent").innerHTML = html;
+      document.getElementById("modal").classList.add("show");
+    }
+
+    function closeModal(event) {
+      if (!event || event.target.id === "modal") {
+        document.getElementById("modal").classList.remove("show");
+      }
+    }
+
+    /* =========================================================
+       PARTICLES
+    ========================================================= */
+
+    const particleSymbols = ["♡", "♥", "✦", "✧", "·", "✿"];
+
+    function createParticle() {
+      const particle = document.createElement("div");
+      particle.className = "particle";
+      particle.textContent =
+        particleSymbols[Math.floor(Math.random() * particleSymbols.length)];
+
+      particle.style.left = Math.random() * 100 + "%";
+      particle.style.fontSize = (10 + Math.random() * 18) + "px";
+      particle.style.animationDuration = (7 + Math.random() * 8) + "s";
+
+      document.getElementById("particles").appendChild(particle);
+
+      setTimeout(() => particle.remove(), 16000);
+    }
+
+    function burstParticles(amount = 12) {
+      for (let i = 0; i < amount; i++) {
+        setTimeout(createParticle, i * 25);
+      }
+    }
+
+    /* Keep a small number of particles floating in the background. */
+    setInterval(createParticle, 750);
+
+    /* =========================================================
+       STARTUP
+    ========================================================= */
+
+    buildTimeline();
+    buildPhotoWall();
+    buildLoveReasons();
+    buildConfessions();
+    buildPlaylist();
+    buildCozyPlans();
+    buildGifts();
+    buildOpenWhen();
+    buildBucketList();
+    showReason();
+    updateProgress();
+    burstParticles(20);
+
+  </script>
+
+  <!-- =========================================================
+       ==================== FINAL CHECKLIST ====================
+       =========================================================
+
+       [ ] Replace girlfriend's name.
+       [ ] Replace your name.
+       [ ] Add her photos.
+       [ ] Add our photos.
+       [ ] Add timeline dates.
+       [ ] Add timeline memories.
+       [ ] Add personal messages.
+       [ ] Replace the love reasons.
+       [ ] Replace the confessions.
+       [ ] Add playlist songs/audio files.
+       [ ] Replace playlist descriptions.
+       [ ] Add your cities.
+       [ ] Replace the birthday plans.
+       [ ] Replace birthday gift messages.
+       [ ] Write all Open When messages.
+       [ ] Add your 100 reasons.
+       [ ] Customize the future bucket list.
+       [ ] Write your personal letter.
+       [ ] Write your final promise.
+       [ ] Add funny/embarrassing photo.
+       [ ] Test website on laptop.
+       [ ] Test website on phone.
+       [ ] Check every image filename.
+       [ ] Check every audio filename.
+       [ ] Make sure images are inside images/.
+       [ ] Make sure MP3 files are inside audio/.
+       [ ] Keep index.html in the main birthday-website folder.
+       [ ] Make a backup before major edits.
+
+       YOU'RE DONE. ❤️
+  ========================================================= -->
+</body>
+</html>
